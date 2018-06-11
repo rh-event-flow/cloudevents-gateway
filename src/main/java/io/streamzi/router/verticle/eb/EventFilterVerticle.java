@@ -31,8 +31,9 @@ public class EventFilterVerticle extends AbstractVerticle {
                 eventBus.consumer(CE_ADDRESS)
                 .toFlowable()
                 .subscribe(message -> {
+                    CloudEvent ce = Json.decodeValue(message.body().toString(), CloudEventImpl.class);
 
-                    logger.info("Reveived from EB: " + message.body());
+                    logger.info("Reveived from EB: " + ce.getEventType());
                     // todo: put to Kafka!
                 });
     }
