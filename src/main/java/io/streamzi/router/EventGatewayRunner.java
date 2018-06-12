@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import io.streamzi.router.http.RxHttpServer;
+import io.streamzi.router.kafka.KafkaInputConsumer;
 import io.streamzi.router.verticle.eb.EventFilterVerticle;
 import io.vertx.core.json.Json;
 import io.vertx.reactivex.core.AbstractVerticle;
@@ -42,6 +43,7 @@ public class EventGatewayRunner extends AbstractVerticle {
 
         logger.info("Deploying verticals");
         vertx.deployVerticle(RxHttpServer.class.getName());
+        vertx.deployVerticle(KafkaInputConsumer.class.getName());
         vertx.deployVerticle(EventFilterVerticle.class.getName());
     }
 
