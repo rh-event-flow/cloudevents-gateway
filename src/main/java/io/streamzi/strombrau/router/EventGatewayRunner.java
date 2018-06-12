@@ -1,13 +1,13 @@
-package io.streamzi.router;
+package io.streamzi.strombrau.router;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import io.streamzi.router.http.RxHttpServer;
-import io.streamzi.router.kafka.KafkaInputConsumer;
-import io.streamzi.router.verticle.eb.EventFilterVerticle;
+import io.streamzi.strombrau.router.http.RxHttpServer;
+import io.streamzi.strombrau.router.kafka.KafkaInputConsumer;
+import io.streamzi.strombrau.router.verticle.eb.EventFilterVerticle;
 import io.vertx.core.json.Json;
 import io.vertx.reactivex.core.AbstractVerticle;
 import io.vertx.reactivex.core.Vertx;

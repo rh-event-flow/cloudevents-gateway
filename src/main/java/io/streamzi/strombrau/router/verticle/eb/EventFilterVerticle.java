@@ -1,4 +1,4 @@
-package io.streamzi.router.verticle.eb;
+package io.streamzi.strombrau.router.verticle.eb;
 
 import io.streamzi.cloudevents.CloudEvent;
 import io.streamzi.cloudevents.impl.CloudEventImpl;

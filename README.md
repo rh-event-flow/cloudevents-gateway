@@ -1,4 +1,4 @@
-# CloudEvent Gateway
+# Strombrau - CloudEvent Gateway
 
 A simple POC for a Gateway that is routing CloudEvents from different sources to a Kafka topic.
 
