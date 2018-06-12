@@ -37,7 +37,6 @@ public class KafkaInputConsumer extends AbstractVerticle {
             config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
             config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonObjectDeserializer.class);
 
-
             Flowable<KafkaConsumerRecord<String, JsonObject>> stream = KafkaConsumer.<String, JsonObject>create(vertx, config)
                     .subscribe("gw.global.input.cloudevents")
                     .toFlowable();
