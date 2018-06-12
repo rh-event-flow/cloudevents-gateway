@@ -2,7 +2,10 @@ package io.streamzi.router.http;
 
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.vertx.core.json.Json;
+import io.vertx.core.json.JsonObject;
+import io.vertx.reactivex.config.ConfigRetriever;
 import io.vertx.reactivex.core.AbstractVerticle;
 import io.vertx.reactivex.core.eventbus.EventBus;
 import io.vertx.reactivex.core.http.HttpServer;
@@ -25,7 +28,6 @@ public class RxHttpServer extends AbstractVerticle {
     public void start() throws Exception {
 
         logger.info("Start of /ce HTTP endpoint");
-
         eventBus = vertx.eventBus();
 
         final HttpServer server = vertx.createHttpServer();
