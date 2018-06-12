@@ -41,11 +41,17 @@ public class RxHttpServer extends AbstractVerticle {
 
             observable.subscribe(cloudEvent -> {
 
-                logger.info("Received Event-Type: " + cloudEvent.getEventType());
+                if (httpServerRequest.path().equalsIgnoreCase("/ce")) {
+                    logger.fine("Received Event-Type: " + cloudEvent.getEventType());
 
-                // todo: proper encoding
-                // ship it!
-                eventBus.publish(CE_ADDRESS, Json.encode(cloudEvent));
+                    // todo: proper encoding
+                    // ship it!
+                    eventBus.publish(CE_ADDRESS, Json.encode(cloudEvent));
+
+
+                } else {
+                    logger.fine("Ignoring request");
+                }
             });
 
             // finish the incoming request, with a ACCEPT response...
