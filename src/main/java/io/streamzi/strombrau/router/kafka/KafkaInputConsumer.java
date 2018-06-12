@@ -1,6 +1,7 @@
-package io.streamzi.router.kafka;
+package io.streamzi.strombrau.router.kafka;
 
 import io.reactivex.Flowable;
+import io.streamzi.strombrau.router.verticle.eb.EventFilterVerticle;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import io.vertx.kafka.client.serialization.JsonObjectDeserializer;
@@ -15,8 +16,6 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Logger;
-
-import static io.streamzi.router.verticle.eb.EventFilterVerticle.CE_ADDRESS;
 
 public class KafkaInputConsumer extends AbstractVerticle {
 
@@ -45,7 +44,7 @@ public class KafkaInputConsumer extends AbstractVerticle {
 
                 logger.fine("pumping data from Kafka to EB");
                 // pump to EB:
-                eventBus.publish(CE_ADDRESS, Json.encode(data.value()));
+                eventBus.publish(EventFilterVerticle.CE_ADDRESS, Json.encode(data.value()));
             });
         });
     }

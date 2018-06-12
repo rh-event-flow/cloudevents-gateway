@@ -1,11 +1,9 @@
-package io.streamzi.router.http;
+package io.streamzi.strombrau.router.http;
 
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
-import io.reactivex.Single;
+import io.streamzi.strombrau.router.verticle.eb.EventFilterVerticle;
 import io.vertx.core.json.Json;
-import io.vertx.core.json.JsonObject;
-import io.vertx.reactivex.config.ConfigRetriever;
 import io.vertx.reactivex.core.AbstractVerticle;
 import io.vertx.reactivex.core.eventbus.EventBus;
 import io.vertx.reactivex.core.http.HttpServer;
@@ -15,8 +13,6 @@ import io.streamzi.cloudevents.impl.CloudEventImpl;
 import io.streamzi.cloudevents.CloudEvent;
 
 import java.util.logging.Logger;
-
-import static io.streamzi.router.verticle.eb.EventFilterVerticle.CE_ADDRESS;
 
 public class RxHttpServer extends AbstractVerticle {
 
@@ -46,7 +42,7 @@ public class RxHttpServer extends AbstractVerticle {
 
                     // todo: proper encoding
                     // ship it!
-                    eventBus.publish(CE_ADDRESS, Json.encode(cloudEvent));
+                    eventBus.publish(EventFilterVerticle.CE_ADDRESS, Json.encode(cloudEvent));
 
 
                 } else {
