@@ -95,4 +95,12 @@
 
     </dependencies>
 
+    <repositories>
+        <repository>
+            <id>jboss-thirdparty-releases</id>
+            <name>JBoss Thirdparty Releases</name>
+            <url>https://repository.jboss.org/nexus/service/local/repositories/thirdparty-releases/content/</url>
+        </repository>
+    </repositories>
+
 </project>
