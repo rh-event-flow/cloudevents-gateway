@@ -31,7 +31,7 @@ public class KafkaInputConsumer extends AbstractVerticle {
         retriever.rxGetConfig().subscribe(myconf -> {
 
             final Map config = new Properties();
-            config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, myconf.getString("KAFKA_SERVICE_HOST") + ":"  + myconf.getInteger("KAFKA_SERVICE_PORT").toString());
+            config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, myconf.getString("MY_CLUSTER_KAFKA_SERVICE_HOST") + ":"  + myconf.getInteger("MY_CLUSTER_KAFKA_SERVICE_PORT").toString());
             config.put(ConsumerConfig.GROUP_ID_CONFIG, "my_group");
             config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
             config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonObjectDeserializer.class);
@@ -42,7 +42,7 @@ public class KafkaInputConsumer extends AbstractVerticle {
 
             stream.subscribe(data -> {
 
-                logger.fine("pumping data from Kafka to EB");
+                logger.severe("pumping data from Kafka to EB");
                 // pump to EB:
                 eventBus.publish(EventFilterVerticle.CE_ADDRESS, Json.encode(data.value()));
             });
