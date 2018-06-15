@@ -33,7 +33,7 @@ public class EventGatewayRunner extends AbstractVerticle {
     }
 
     public static void main(String[] args) {
-        logger.fine("Starting main() program");
+        logger.info("\uD83C\uDF7A \uD83C\uDF7A Starting Strombrau.io \uD83C\uDF7A \uD83C\uDF7A");
         Vertx vertx = Vertx.vertx();
         vertx.deployVerticle(EventGatewayRunner.class.getName());
     }
