@@ -2,6 +2,7 @@ package io.streamzi.strombrau.router.kafka;
 
 import io.reactivex.Flowable;
 import io.streamzi.strombrau.router.verticle.eb.EventFilterVerticle;
+import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import io.vertx.kafka.client.serialization.BufferDeserializer;
 import io.vertx.reactivex.config.ConfigRetriever;
@@ -44,10 +45,14 @@ public class KafkaInputConsumer extends AbstractVerticle {
 
             stream.subscribe(data -> {
 
-                logger.info("pumping raw data from Kafka to EB");
-
                 // pump to EB:
-                eventBus.publish(EventFilterVerticle.CE_ADDRESS, data.value().toJsonObject());
+                logger.info("pumping raw data from Kafka to EB");
+                try {
+                    final JsonObject jsonObject = data.value().toJsonObject();
+                    eventBus.publish(EventFilterVerticle.CE_ADDRESS, jsonObject);
+                } catch (Exception e) {
+                    logger.warning("Cloud not parse data: " + data.value());
+                }
             });
         });
     }
