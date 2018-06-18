@@ -2,12 +2,11 @@ package io.streamzi.strombrau.router.verticle.eb;
 
 import io.streamzi.cloudevents.CloudEvent;
 import io.streamzi.cloudevents.impl.CloudEventImpl;
+import io.streamzi.strombrau.router.StrombrauBaseVerticle;
 import io.vertx.core.json.Json;
 import io.vertx.kafka.client.producer.KafkaWriteStream;
 import io.vertx.kafka.client.serialization.JsonObjectSerializer;
 import io.vertx.reactivex.config.ConfigRetriever;
-import io.vertx.reactivex.core.AbstractVerticle;
-import io.vertx.reactivex.core.eventbus.EventBus;
 import io.vertx.reactivex.kafka.client.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -16,20 +15,18 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-public class EventFilterVerticle extends AbstractVerticle {
+public class KafkaEventTopicPublisher extends StrombrauBaseVerticle {
 
-    private static final Logger logger = Logger.getLogger(EventFilterVerticle.class.getName());
+    private static final Logger logger = Logger.getLogger(KafkaEventTopicPublisher.class.getName());
 
     public static final String CE_ADDRESS = "couldEvent";
-    private EventBus eventBus;
+
     private KafkaWriteStream<String, JsonObjectSerializer> writeStream;
     private KafkaProducer<String, String> producer;
 
     @Override
-    public void start() throws Exception {
-        logger.info("Starting EventBus filter/consumer");
-
-        ConfigRetriever retriever = ConfigRetriever.create(vertx);
+    public void startStromBrauVerticle(final ConfigRetriever retriever) {
+        logger.info("Starting Event Router");
 
         retriever.rxGetConfig().subscribe(myconf -> {
             final Map config = new Properties();
@@ -39,13 +36,8 @@ public class EventFilterVerticle extends AbstractVerticle {
             writeStream = KafkaWriteStream.create(vertx.getDelegate(), config, String.class, String.class);
         });
 
-        assignEventBus();
         registerHandler();
 
-    }
-
-    private void assignEventBus() {
-        eventBus = vertx.eventBus();
     }
 
     private void registerHandler() {

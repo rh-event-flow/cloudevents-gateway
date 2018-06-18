@@ -2,10 +2,10 @@ package io.streamzi.strombrau.router.http;
 
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
-import io.streamzi.strombrau.router.verticle.eb.EventFilterVerticle;
+import io.streamzi.strombrau.router.StrombrauBaseVerticle;
+import io.streamzi.strombrau.router.verticle.eb.KafkaEventTopicPublisher;
 import io.vertx.core.json.Json;
-import io.vertx.reactivex.core.AbstractVerticle;
-import io.vertx.reactivex.core.eventbus.EventBus;
+import io.vertx.reactivex.config.ConfigRetriever;
 import io.vertx.reactivex.core.http.HttpServer;
 import io.vertx.reactivex.core.http.HttpServerRequest;
 
@@ -14,17 +14,13 @@ import io.streamzi.cloudevents.CloudEvent;
 
 import java.util.logging.Logger;
 
-public class RxHttpServer extends AbstractVerticle {
+public class HttpEventSourceVerticle extends StrombrauBaseVerticle {
 
-    private static final Logger logger = Logger.getLogger(RxHttpServer.class.getName());
-
-    private EventBus eventBus;
+    private static final Logger logger = Logger.getLogger(HttpEventSourceVerticle.class.getName());
 
     @Override
-    public void start() throws Exception {
-
-        logger.info("Start of /ce HTTP endpoint");
-        eventBus = vertx.eventBus();
+    public void startStromBrauVerticle(final ConfigRetriever retriever) {
+        logger.info("Starting HTTP Ingest Verticle");
 
         final HttpServer server = vertx.createHttpServer();
         final Flowable<HttpServerRequest> requestFlowable = server.requestStream().toFlowable();
@@ -37,12 +33,12 @@ public class RxHttpServer extends AbstractVerticle {
 
             observable.subscribe(cloudEvent -> {
 
-                if (httpServerRequest.path().equalsIgnoreCase("/ce")) {
+                if (httpServerRequest.path().equals("/ce")) {
                     logger.fine("Received Event-Type: " + cloudEvent.getEventType());
 
                     // todo: proper encoding
                     // ship it!
-                    eventBus.publish(EventFilterVerticle.CE_ADDRESS, Json.encode(cloudEvent));
+                    eventBus.publish(KafkaEventTopicPublisher.CE_ADDRESS, Json.encode(cloudEvent));
 
 
                 } else {

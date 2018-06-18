@@ -1,14 +1,12 @@
 package io.streamzi.strombrau.router.kafka;
 
 import io.reactivex.Flowable;
-import io.streamzi.strombrau.router.verticle.eb.EventFilterVerticle;
-import io.vertx.core.json.Json;
+import io.streamzi.strombrau.router.StrombrauBaseVerticle;
+import io.streamzi.strombrau.router.verticle.eb.KafkaEventTopicPublisher;
 import io.vertx.core.json.JsonObject;
 import io.vertx.kafka.client.serialization.BufferDeserializer;
 import io.vertx.reactivex.config.ConfigRetriever;
-import io.vertx.reactivex.core.AbstractVerticle;
 import io.vertx.core.buffer.Buffer;
-import io.vertx.reactivex.core.eventbus.EventBus;
 import io.vertx.reactivex.kafka.client.consumer.KafkaConsumer;
 import io.vertx.reactivex.kafka.client.consumer.KafkaConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -17,18 +15,14 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-public class KafkaInputConsumer extends AbstractVerticle {
+public class KafkaEventSourceVerticle extends StrombrauBaseVerticle {
 
-    private static final Logger logger = Logger.getLogger(KafkaInputConsumer.class.getName());
-
-    private EventBus eventBus;
+    private static final Logger logger = Logger.getLogger(KafkaEventSourceVerticle.class.getName());
 
     @Override
-    public void start() {
-        logger.info("Starting generic Kafka consumer");
+    protected void startStromBrauVerticle(final ConfigRetriever retriever) {
+        logger.info("Starting Kafka Ingest Verticle");
 
-        eventBus = vertx.eventBus();
-        ConfigRetriever retriever = ConfigRetriever.create(vertx);
 
         retriever.rxGetConfig().subscribe(myconf -> {
 
@@ -49,7 +43,7 @@ public class KafkaInputConsumer extends AbstractVerticle {
                 logger.info("pumping raw data from Kafka to EB");
                 try {
                     final JsonObject jsonObject = data.value().toJsonObject();
-                    eventBus.publish(EventFilterVerticle.CE_ADDRESS, jsonObject);
+                    eventBus.publish(KafkaEventTopicPublisher.CE_ADDRESS, jsonObject);
                 } catch (Exception e) {
                     logger.warning("Cloud not parse data: " + data.value());
                 }
