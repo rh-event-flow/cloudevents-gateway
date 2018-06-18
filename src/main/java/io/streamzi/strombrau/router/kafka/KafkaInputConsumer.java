@@ -4,14 +4,14 @@ import io.reactivex.Flowable;
 import io.streamzi.strombrau.router.verticle.eb.EventFilterVerticle;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
-import io.vertx.kafka.client.serialization.JsonObjectDeserializer;
+import io.vertx.kafka.client.serialization.BufferDeserializer;
 import io.vertx.reactivex.config.ConfigRetriever;
 import io.vertx.reactivex.core.AbstractVerticle;
+import io.vertx.core.buffer.Buffer;
 import io.vertx.reactivex.core.eventbus.EventBus;
 import io.vertx.reactivex.kafka.client.consumer.KafkaConsumer;
 import io.vertx.reactivex.kafka.client.consumer.KafkaConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.common.serialization.StringDeserializer;
 
 import java.util.Map;
 import java.util.Properties;
@@ -24,7 +24,9 @@ public class KafkaInputConsumer extends AbstractVerticle {
     private EventBus eventBus;
 
     @Override
-    public void start() throws Exception {
+    public void start() {
+        logger.info("Starting generic Kafka consumer");
+
         eventBus = vertx.eventBus();
         ConfigRetriever retriever = ConfigRetriever.create(vertx);
 
@@ -33,18 +35,24 @@ public class KafkaInputConsumer extends AbstractVerticle {
             final Map config = new Properties();
             config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, myconf.getString("MY_CLUSTER_KAFKA_SERVICE_HOST") + ":"  + myconf.getInteger("MY_CLUSTER_KAFKA_SERVICE_PORT").toString());
             config.put(ConsumerConfig.GROUP_ID_CONFIG, "my_group");
-            config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-            config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonObjectDeserializer.class);
+            config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+            config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, BufferDeserializer.class);
+            config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, BufferDeserializer.class);
 
-            Flowable<KafkaConsumerRecord<String, JsonObject>> stream = KafkaConsumer.<String, JsonObject>create(vertx, config)
+            Flowable<KafkaConsumerRecord<Buffer, Buffer>> stream = KafkaConsumer.<String, JsonObject>create(vertx, config)
                     .subscribe("gw.global.input.cloudevents")
                     .toFlowable();
 
             stream.subscribe(data -> {
 
-                logger.severe("pumping data from Kafka to EB");
                 // pump to EB:
-                eventBus.publish(EventFilterVerticle.CE_ADDRESS, Json.encode(data.value()));
+                logger.info("pumping raw data from Kafka to EB");
+                try {
+                    final JsonObject jsonObject = data.value().toJsonObject();
+                    eventBus.publish(EventFilterVerticle.CE_ADDRESS, jsonObject);
+                } catch (Exception e) {
+                    logger.warning("Cloud not parse data: " + data.value());
+                }
             });
         });
     }
