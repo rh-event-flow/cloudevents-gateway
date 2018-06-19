@@ -37,7 +37,6 @@ public class KafkaEventTopicPublisher extends StrombrauBaseVerticle {
         });
 
         registerHandler();
-
     }
 
     private void registerHandler() {
@@ -47,7 +46,7 @@ public class KafkaEventTopicPublisher extends StrombrauBaseVerticle {
                 .subscribe(message -> {
 
                     CloudEvent ce = Json.decodeValue(message.body().toString(), CloudEventImpl.class);
-                    logger.info("Reveived on EB: " + ce.getEventType());
+                    logger.info("Publishing event to Kafka (" + ce.getEventType() +")");
                     writeStream.write(new ProducerRecord(ce.getEventType(), ce.getEventID(), message.body().toString()));
                 });
     }

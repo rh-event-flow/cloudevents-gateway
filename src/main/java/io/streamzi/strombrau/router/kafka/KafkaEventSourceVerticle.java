@@ -40,7 +40,7 @@ public class KafkaEventSourceVerticle extends StrombrauBaseVerticle {
             stream.subscribe(data -> {
 
                 // pump to EB:
-                logger.info("pumping raw data from Kafka to EB");
+                logger.info("Received Event-Type on Kafka endpoint");
                 try {
                     final JsonObject jsonObject = data.value().toJsonObject();
                     eventBus.publish(KafkaEventTopicPublisher.CE_ADDRESS, jsonObject);

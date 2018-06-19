@@ -34,7 +34,7 @@ public class HttpEventSourceVerticle extends StrombrauBaseVerticle {
             observable.subscribe(cloudEvent -> {
 
                 if (httpServerRequest.path().equals("/ce")) {
-                    logger.fine("Received Event-Type: " + cloudEvent.getEventType());
+                    logger.info("Received Event-Type: " + cloudEvent.getEventType());
 
                     // todo: proper encoding
                     // ship it!
