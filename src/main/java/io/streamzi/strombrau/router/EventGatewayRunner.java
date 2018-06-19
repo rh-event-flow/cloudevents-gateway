@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import io.streamzi.strombrau.router.http.RxHttpServer;
-import io.streamzi.strombrau.router.kafka.KafkaInputConsumer;
-import io.streamzi.strombrau.router.verticle.eb.EventFilterVerticle;
+import io.streamzi.strombrau.router.http.HttpEventSourceVerticle;
+import io.streamzi.strombrau.router.kafka.KafkaEventSourceVerticle;
+import io.streamzi.strombrau.router.verticle.eb.KafkaEventTopicPublisher;
 import io.vertx.core.json.Json;
 import io.vertx.reactivex.core.AbstractVerticle;
 import io.vertx.reactivex.core.Vertx;
@@ -27,7 +27,7 @@ public class EventGatewayRunner extends AbstractVerticle {
         // add Jackson datatype for ZonedDateTime
         Json.mapper.registerModule(new Jdk8Module());
 
-        SimpleModule module = new SimpleModule();
+        final SimpleModule module = new SimpleModule();
         module.addSerializer(ZonedDateTime.class, new ZonedDateTimeSerializer());
         Json.mapper.registerModule(module);
     }
@@ -42,9 +42,9 @@ public class EventGatewayRunner extends AbstractVerticle {
     public void start() throws Exception {
 
         logger.info("Deploying verticals");
-        vertx.deployVerticle(RxHttpServer.class.getName());
-        vertx.deployVerticle(KafkaInputConsumer.class.getName());
-        vertx.deployVerticle(EventFilterVerticle.class.getName());
+        vertx.deployVerticle(KafkaEventTopicPublisher.class.getName());
+        vertx.deployVerticle(HttpEventSourceVerticle.class.getName());
+        vertx.deployVerticle(KafkaEventSourceVerticle.class.getName());
     }
 
     private static class ZonedDateTimeSerializer extends JsonSerializer<ZonedDateTime> {
