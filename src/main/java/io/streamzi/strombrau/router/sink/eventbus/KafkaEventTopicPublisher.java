@@ -1,8 +1,8 @@
-package io.streamzi.strombrau.router.verticle.eb;
+package io.streamzi.strombrau.router.sink.eventbus;
 
 import io.streamzi.cloudevents.CloudEvent;
 import io.streamzi.cloudevents.impl.CloudEventImpl;
-import io.streamzi.strombrau.router.StrombrauBaseVerticle;
+import io.streamzi.strombrau.router.base.StrombrauBaseVerticle;
 import io.vertx.core.json.Json;
 import io.vertx.kafka.client.producer.KafkaWriteStream;
 import io.vertx.kafka.client.serialization.JsonObjectSerializer;
