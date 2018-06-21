@@ -1,9 +1,9 @@
-package io.streamzi.strombrau.router.http;
+package io.streamzi.strombrau.router.source.http;
 
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
-import io.streamzi.strombrau.router.StrombrauBaseVerticle;
-import io.streamzi.strombrau.router.verticle.eb.KafkaEventTopicPublisher;
+import io.streamzi.strombrau.router.base.StrombrauBaseVerticle;
+import io.streamzi.strombrau.router.sink.eventbus.KafkaEventTopicPublisher;
 import io.vertx.core.json.Json;
 import io.vertx.reactivex.config.ConfigRetriever;
 import io.vertx.reactivex.core.http.HttpServer;

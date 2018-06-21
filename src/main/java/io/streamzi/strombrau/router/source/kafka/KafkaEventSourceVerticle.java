@@ -1,8 +1,8 @@
-package io.streamzi.strombrau.router.kafka;
+package io.streamzi.strombrau.router.source.kafka;
 
 import io.reactivex.Flowable;
-import io.streamzi.strombrau.router.StrombrauBaseVerticle;
-import io.streamzi.strombrau.router.verticle.eb.KafkaEventTopicPublisher;
+import io.streamzi.strombrau.router.base.StrombrauBaseVerticle;
+import io.streamzi.strombrau.router.sink.eventbus.KafkaEventTopicPublisher;
 import io.vertx.core.json.JsonObject;
 import io.vertx.kafka.client.serialization.BufferDeserializer;
 import io.vertx.reactivex.config.ConfigRetriever;

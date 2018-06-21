@@ -1,5 +1,8 @@
 # :beers: Strombrau - CloudEvent Gateway
 
+image:https://api.travis-ci.org/project-streamzi/event-gateway.png[Build Status (Travis CI), link=https://travis-ci.org/project-streamzi/event-gateway]
+
+
 A simple POC for a Gateway that is routing CloudEvents from different sources to a Kafka topic.
 
 

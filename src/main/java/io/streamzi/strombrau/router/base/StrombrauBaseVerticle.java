@@ -1,4 +1,4 @@
-package io.streamzi.strombrau.router;
+package io.streamzi.strombrau.router.base;
 
 import io.vertx.reactivex.config.ConfigRetriever;
 import io.vertx.reactivex.core.AbstractVerticle;
