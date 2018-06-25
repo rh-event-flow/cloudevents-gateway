@@ -47,6 +47,8 @@
 
     <properties>
         <vertx.version>3.5.2</vertx.version>
+        <jcloudevents.version>0.0.2</jcloudevents.version>
+        <fmp.version>3.5.40</fmp.version>
     </properties>
 
     <dependencies>
@@ -90,7 +92,7 @@
         <dependency>
             <groupId>io.streamzi</groupId>
             <artifactId>jcloudevents-api</artifactId>
-            <version>0.0.2</version>
+            <version>${jcloudevents.version}</version>
         </dependency>
 
     </dependencies>
@@ -111,7 +113,7 @@
                     <plugin>
                         <groupId>io.fabric8</groupId>
                         <artifactId>fabric8-maven-plugin</artifactId>
-                        <version>3.5.33</version>
+                        <version>${fmp.version}</version>
                         <executions>
                             <execution>
                                 <goals>
