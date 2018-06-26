@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import io.streamzi.strombrau.router.sink.eventbus.HttpEventPublisher;
 import io.streamzi.strombrau.router.source.http.HttpEventSourceVerticle;
 import io.streamzi.strombrau.router.source.kafka.KafkaEventSourceVerticle;
 import io.streamzi.strombrau.router.sink.eventbus.KafkaEventTopicPublisher;
@@ -43,6 +44,7 @@ public class EventGatewayRunner extends AbstractVerticle {
 
         logger.info("Deploying verticals");
         vertx.deployVerticle(KafkaEventTopicPublisher.class.getName());
+        vertx.deployVerticle(HttpEventPublisher.class.getName());
         vertx.deployVerticle(HttpEventSourceVerticle.class.getName());
         vertx.deployVerticle(KafkaEventSourceVerticle.class.getName());
     }
