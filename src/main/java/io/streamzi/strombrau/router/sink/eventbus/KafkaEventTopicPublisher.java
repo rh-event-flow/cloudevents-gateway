@@ -26,7 +26,7 @@ public class KafkaEventTopicPublisher extends StrombrauBaseVerticle {
 
     @Override
     public void startStromBrauVerticle(final ConfigRetriever retriever) {
-        logger.info("Starting Event Router");
+        logger.info("Starting Kafka Publisher");
 
         retriever.rxGetConfig().subscribe(myconf -> {
             final Map config = new Properties();
