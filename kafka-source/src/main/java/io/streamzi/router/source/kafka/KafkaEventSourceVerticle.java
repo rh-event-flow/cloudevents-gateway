@@ -23,8 +23,6 @@ import java.util.logging.Logger;
 
 public class KafkaEventSourceVerticle extends StrombrauBaseVerticle {
 
-    public static final String CE_ADDRESS = "couldEvent";
-
     private KafkaWriteStream<String, JsonObjectSerializer> writeStream;
 
 
@@ -54,7 +52,6 @@ public class KafkaEventSourceVerticle extends StrombrauBaseVerticle {
 
             stream.subscribe(data -> {
 
-                // pump to EB:
                 logger.info("Received Event-Type on Kafka endpoint");
                 try {
                     final JsonObject jsonObject = data.value().toJsonObject();
