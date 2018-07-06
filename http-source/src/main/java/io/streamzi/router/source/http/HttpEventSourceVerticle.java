@@ -52,12 +52,7 @@ public class HttpEventSourceVerticle extends StrombrauBaseVerticle {
                     logger.info("Received Event-Type: " + cloudEvent.getEventType());
 
                     // ship it!
-//                   eventBus.publish("couldEvent", Json.encode(cloudEvent));
-
                     writeStream.write(new ProducerRecord(cloudEvent.getEventType(), cloudEvent.getEventID(), Json.encode(cloudEvent)));
-
-
-
                 } else {
                     logger.fine("Ignoring request");
                 }
