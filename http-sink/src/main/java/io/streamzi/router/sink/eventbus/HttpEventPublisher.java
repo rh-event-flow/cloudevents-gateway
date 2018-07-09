@@ -19,6 +19,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 
 import java.util.Map;
 import java.util.Properties;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 public class HttpEventPublisher extends StrombrauBaseVerticle {
@@ -41,7 +42,10 @@ public class HttpEventPublisher extends StrombrauBaseVerticle {
 
         final Map consumerConfig = new Properties();
         consumerConfig.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, myconf.getString("MY_CLUSTER_KAFKA_SERVICE_HOST") + ":" + myconf.getInteger("MY_CLUSTER_KAFKA_SERVICE_PORT").toString());
-        consumerConfig.put(ConsumerConfig.GROUP_ID_CONFIG, "io.streamzi.kafka.cloudevent.type." + myconf.getString("STREAMZI_EVENT_TYPE"));
+
+        // if STREAMZI_GROUP is not defined, we use a UUID, to guarantee unique consumer group, per EVENT_TYPE
+        final String streamziGroup = myconf.getString("STREAMZI_GROUP") != null ? myconf.getString("STREAMZI_GROUP") : UUID.randomUUID().toString();
+        consumerConfig.put(ConsumerConfig.GROUP_ID_CONFIG, "io.streamzi.kafka.cloudevent." + myconf.getString("STREAMZI_EVENT_TYPE") + "." + streamziGroup);
         consumerConfig.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, BufferDeserializer.class);
         consumerConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, BufferDeserializer.class);
