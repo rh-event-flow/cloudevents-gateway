@@ -6,25 +6,29 @@
 A simple POC for a Gateway that is routing CloudEvents from different sources to a Kafka topic.
 
 
-## Input Options
+## Input/Source Options
 
 The current version of the Gateway supports input via HTTP and Apache Kafka.
 
-### HTTP input
+### HTTP source
 
-The gateway supports an `/ce` endpoint that understands the `CloudEvent` format, and publishes it to the Vertx Event bus.
+The gateway supports an `/ce` endpoint that understands the `CloudEvent` format, and publishes it to a Kafka topic, matching the 
+`eventType` of the CloudEvent.
 
-### Kafka input
+### Kafka source
 
 The gateway listens to a global topic (`gw.global.input.cloudevents`) for incoming events. It than routes them to the 
-Eventbus of vert.x
+Kafka topic, representing the given `eventType`.
 
-## EventBus filter
+## Sinks
 
-The EventBus Consumer receives messages published by the HTTP and Kafka `Verticle`. It than goes ahead and routes
-the `CloudEvent` to a topic that matches the event type (e.g. `aws.s3.object.created` or `Microsoft.Storage.BlobCreated`)
+The Gateway is based on Apache Kafka, and all incoming CloudEvents  are routed to a Kafka topic/sink,
+representing the event type. 
 
-## Consuming Clients
+### HTTP Sink
 
-Currently the _outbound_ channel is Apache Kafka, hence any consumer can now connect to the GW and receive the JSON
-playload for the CloudEvent, to trigger custom processing.
+Publishing all events from a given/configurable `event-type` to a configurable HTTP endpoint.
+
+### Kafka Sink
+
+Any `eventType` topic can be accessed with normal Apache Kafka APIs, such as the Streams API, for processing CloudEvents.
