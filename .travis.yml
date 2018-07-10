@@ -3,13 +3,18 @@ language: java
 sudo: false
 
 jdk:
-  - oraclejdk8
+#  - oraclejdk8
   - openjdk8
-  - openjdk9
-  - openjdk10
+#  - openjdk9
+#  - openjdk10
 #  - openjdk11
+
+services:
+- docker
+
+script:
+- "./.travis/build.sh"
 
 branches:
   only:
     - master
-
