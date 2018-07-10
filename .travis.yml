@@ -1,15 +1,15 @@
 language: java
-
-sudo: false
-
+sudo: required
 jdk:
-  - oraclejdk8
-  - openjdk8
-  - openjdk9
-  - openjdk10
-#  - openjdk11
-
+- openjdk8
+services:
+- docker
+script:
+- "./.travis/build.sh"
 branches:
   only:
-    - master
-
+  - master
+env:
+  global:
+  - secure: ja49kwWSKnE7E7dVIpkmCxpNWAk8Ow0NlvcwjsACzXLasA+GMFTHhs8zzGfFuAcQDWa6FD5qCw7TFy2H3KRDruOFrmm6Q3kmrq0oZGsTHE0N9JrhRY5NrGcoZi1WuGo1eynxtm8/CrgsL6sEyxL7gjhz11g/8TFbXGsY1AoF8ISW0wPBFaA8EY0u5+VuxYZMdt8f3ViVncGbR2D7XHZpJSQPP6TStuOWaxg1EAc1cBC9ZuYZlxhcaZptYCEidHbWs8sTAHkgqUmlzQBX0cIkGwp7I+gwdPLXEv20gnSnysMMzNTXaF1KT4WWLaee58up0OzwMeIaxguq04OSP8y8G6IWzNOxvMLrtHjpsilvKJ0dqXFInaobI45SFkU03FvJu8Jb+b/qOz8wCLBbjLcAVXFGk35OrSPnGLf3XA5TYhPqhQ7nbG9205aYO3GZSZB0qQy+f3XsRhj1pXHGrQ+OVj0wdDssEJQB67cDSqua2Hotzuxg0SXWhhgff4t9HLEKi0HvdqRvqjbyezrVJbfEBv8A6pS0YT98S+VC31lbKwH36BvjnEWkyQ40zOydsPTi2ch8OsiDELIM/XFaOsUEyWi6dbMlMhZFqeDC48saL4sFMC+WEEULwrF+/b4Mf2T2ScGvJMgRCGwk2h+3Yw+N508tarLMqIxEZI+WxEwRDoA=
+  - secure: BZFiZ65Ua1/k3enRmUYTnpBznrWjTmra7tYpz8qD0YVfa4ZklKlhhvbhtRkzoou2iO9DxgQ9aJ11/+ZLRPpE18z1EnyxS2N6foNNo1iHM856qA2eTWQhdRPdn/UOYw9mskEFLr6p8B3RWcl9BkAJNscYQFNSyAmXSM0XsHcW+5U56k9HuCRZ1H/AID3GCTDoBRdCe7oCys+vGFZs4SgNcbkJ9bTwli8tTYij2UWfpsW4F0FZMiWTEYo4A4pWmnjA4bY2R2tHyurbbRFEpb3WWZvreQhbp/je3a9fx0scAd4jF2X73TDHjvfklVenssVi5erMm2ywoEnlXOTdbqrDpluLowgr0xl9AjgWo7ufDPNTkfEZfI5nHYDTg0ZXVqFry1myMp2jOhIlAUH3O0TTgV2Ladpgqy3bihPc2I3ffg5w1OeCt5q/16UqhETt7Q31lJH8Vh71m6WfY3bNuaM5n2iLRRvvG2YmAEsSPgcaFGNzptf4lReU/rK0ccZTgcajjwQJaVo/0Qps3M2V9OzzlmccDowR3ycx67OHX6lNbgLeF4bAz2Um7spvc2MwXHK92z3aPaG0KM7sqE/dhL442xcpzXrQlPB7toVta0Toe+OFWaffpkK1wuNcOVpdvs2lN1s3YHRE81brAtD3BM19gWuXt6Yn9LDhctdrOHjKkks=
