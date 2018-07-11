@@ -4,26 +4,27 @@ import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.streamzi.router.base.StrombrauBaseVerticle;
 import io.vertx.core.json.Json;
-import io.vertx.kafka.client.producer.KafkaWriteStream;
-import io.vertx.kafka.client.serialization.JsonObjectSerializer;
+import io.vertx.kafka.client.producer.RecordMetadata;
 import io.vertx.reactivex.config.ConfigRetriever;
 import io.vertx.reactivex.core.http.HttpServer;
 import io.vertx.reactivex.core.http.HttpServerRequest;
 
 import io.streamzi.cloudevents.impl.CloudEventImpl;
 import io.streamzi.cloudevents.CloudEvent;
+import io.vertx.reactivex.kafka.client.producer.KafkaProducer;
+import io.vertx.reactivex.kafka.client.producer.KafkaProducerRecord;
 import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.clients.producer.ProducerRecord;
 
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class HttpEventSourceVerticle extends StrombrauBaseVerticle {
 
     private static final Logger logger = Logger.getLogger(HttpEventSourceVerticle.class.getName());
 
-    private KafkaWriteStream<String, JsonObjectSerializer> writeStream;
+    private KafkaProducer<String, String> producer;
 
     @Override
     public void startStromBrauVerticle(final ConfigRetriever retriever) {
@@ -33,7 +34,7 @@ public class HttpEventSourceVerticle extends StrombrauBaseVerticle {
             final Map config = new Properties();
             config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, myconf.getString("MY_CLUSTER_KAFKA_SERVICE_HOST") + ":"  + myconf.getInteger("MY_CLUSTER_KAFKA_SERVICE_PORT").toString());
 
-            writeStream = KafkaWriteStream.create(vertx.getDelegate(), config, String.class, String.class);
+            producer = KafkaProducer.create(vertx, config, String.class, String.class);
         });
 
 
@@ -52,7 +53,25 @@ public class HttpEventSourceVerticle extends StrombrauBaseVerticle {
                     logger.info("Received Event-Type: " + cloudEvent.getEventType());
 
                     // ship it!
-                    writeStream.write(new ProducerRecord(cloudEvent.getEventType(), cloudEvent.getEventID(), Json.encode(cloudEvent)));
+                    try {
+
+                        final KafkaProducerRecord<String, String> record =
+                                KafkaProducerRecord.create(cloudEvent.getEventType(), cloudEvent.getEventID(), Json.encode(cloudEvent));
+
+                        producer.write(record, done -> {
+
+                            if (done.succeeded()) {
+
+                                final RecordMetadata recordMetadata = done.result();
+                                logger.info("Message " + record.value() + " written on topic=" + recordMetadata.getTopic() +
+                                        ", partition=" + recordMetadata.getPartition() +
+                                        ", offset=" + recordMetadata.getOffset());
+                            }
+                        });
+
+                    } catch (Exception e) {
+                        logger.log(Level.SEVERE, "whoops", e);
+                    }
                 } else {
                     logger.fine("Ignoring request");
                 }
