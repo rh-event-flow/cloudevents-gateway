@@ -25,9 +25,6 @@ import java.util.logging.Logger;
 public class HttpEventPublisher extends StrombrauBaseVerticle {
 
     private static final Logger logger = Logger.getLogger(HttpEventPublisher.class.getName());
-
-    public static final String CE_ADDRESS = "couldEvent";
-
     private HttpClient client;
 
     @Override
@@ -52,15 +49,16 @@ public class HttpEventPublisher extends StrombrauBaseVerticle {
 
 
         Flowable<KafkaConsumerRecord<Buffer, Buffer>> stream = KafkaConsumer.<String, JsonObject>create(vertx, consumerConfig)
-                .subscribe("gw.global.input.cloudevents")
+                .subscribe(myconf.getString("STREAMZI_EVENT_TYPE"))
                 .toFlowable();
 
         stream.subscribe(data -> {
 
             final JsonObject jsonObject = data.value().toJsonObject();
             logger.info("Publishing event to HTTP: (" + jsonObject.getString("eventType") + ")");
+            logger.info("Posting to ->   " +  myconf.getString("HTTP_OUTPUT_ENDPOINT")  );
 
-            client.post(myconf.getString("HTTP_OUTPUT_ENDPOINT"), response -> {
+            client.postAbs(myconf.getString("HTTP_OUTPUT_ENDPOINT"), response -> {
                 System.out.println("Received response with status code " + response.statusCode());
             }).putHeader("content-type", "text/plain").end(jsonObject.toString());
         });
