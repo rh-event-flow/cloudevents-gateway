@@ -1,4 +1,4 @@
-package io.streamzi.router.base;
+package io.streamzi.cloudevents.gateway.base;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 
 import static java.time.format.DateTimeFormatter.ISO_ZONED_DATE_TIME;
 
-public abstract class StrombrauBaseVerticle extends AbstractVerticle {
+public abstract class CloudEventsGatewayBaseVerticle extends AbstractVerticle {
 
     static {
 
@@ -29,7 +29,7 @@ public abstract class StrombrauBaseVerticle extends AbstractVerticle {
     }
 
 
-    private static final Logger logger = Logger.getLogger(StrombrauBaseVerticle.class.getName());
+    private static final Logger logger = Logger.getLogger(CloudEventsGatewayBaseVerticle.class.getName());
 
     protected EventBus eventBus;
 
