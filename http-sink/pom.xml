@@ -46,7 +46,7 @@
     <dependencies>
 
         <dependency>
-            <groupId>io.streamzi.router</groupId>
+            <groupId>io.streamzi.cloudevents</groupId>
             <artifactId>common</artifactId>
             <version>${project.version}</version>
         </dependency>
