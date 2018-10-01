@@ -1,27 +1,27 @@
-package io.streamzi.router.source.kafka;
+package io.streamzi.cloudevents.gateway.source.kafka;
 
 import io.reactivex.Flowable;
 import io.streamzi.cloudevents.CloudEvent;
 import io.streamzi.cloudevents.impl.CloudEventImpl;
-import io.streamzi.router.base.StrombrauBaseVerticle;
+import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import io.vertx.kafka.client.producer.KafkaWriteStream;
 import io.vertx.kafka.client.serialization.BufferDeserializer;
 import io.vertx.kafka.client.serialization.JsonObjectSerializer;
 import io.vertx.reactivex.config.ConfigRetriever;
-import io.vertx.core.buffer.Buffer;
 import io.vertx.reactivex.kafka.client.consumer.KafkaConsumer;
 import io.vertx.reactivex.kafka.client.consumer.KafkaConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import io.streamzi.cloudevents.gateway.base.CloudEventsGatewayBaseVerticle;
 
 import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-public class KafkaEventSourceVerticle extends StrombrauBaseVerticle {
+public class KafkaEventSourceVerticle extends CloudEventsGatewayBaseVerticle {
 
     private KafkaWriteStream<String, JsonObjectSerializer> writeStream;
 
@@ -35,14 +35,14 @@ public class KafkaEventSourceVerticle extends StrombrauBaseVerticle {
         retriever.rxGetConfig().subscribe(myconf -> {
 
             final Map consumerConfig = new Properties();
-            consumerConfig.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, myconf.getString("MY_CLUSTER_KAFKA_SERVICE_HOST") + ":"  + myconf.getInteger("MY_CLUSTER_KAFKA_SERVICE_PORT").toString());
+            consumerConfig.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, myconf.getString("MY_CLUSTER_KAFKA_SERVICE_HOST") + ":" + myconf.getInteger("MY_CLUSTER_KAFKA_SERVICE_PORT").toString());
             consumerConfig.put(ConsumerConfig.GROUP_ID_CONFIG, "io.streamzi.kafka.source");
             consumerConfig.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
             consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, BufferDeserializer.class);
             consumerConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, BufferDeserializer.class);
 
             final Map producerConfig = new Properties();
-            producerConfig.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, myconf.getString("MY_CLUSTER_KAFKA_SERVICE_HOST") + ":"  + myconf.getInteger("MY_CLUSTER_KAFKA_SERVICE_PORT").toString());
+            producerConfig.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, myconf.getString("MY_CLUSTER_KAFKA_SERVICE_HOST") + ":" + myconf.getInteger("MY_CLUSTER_KAFKA_SERVICE_PORT").toString());
             writeStream = KafkaWriteStream.create(vertx.getDelegate(), producerConfig, String.class, String.class);
 
 

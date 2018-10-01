@@ -1,28 +1,22 @@
-package io.streamzi.router.sink.eventbus;
+package io.streamzi.cloudevents.gateway.sink.eventbus;
 
 import io.reactivex.Flowable;
-import io.streamzi.cloudevents.CloudEvent;
-import io.streamzi.cloudevents.impl.CloudEventImpl;
-import io.streamzi.router.base.StrombrauBaseVerticle;
 import io.vertx.core.buffer.Buffer;
-import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
-import io.vertx.kafka.client.producer.KafkaWriteStream;
 import io.vertx.kafka.client.serialization.BufferDeserializer;
 import io.vertx.reactivex.config.ConfigRetriever;
 import io.vertx.reactivex.core.http.HttpClient;
 import io.vertx.reactivex.kafka.client.consumer.KafkaConsumer;
 import io.vertx.reactivex.kafka.client.consumer.KafkaConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.clients.producer.ProducerRecord;
+import io.streamzi.cloudevents.gateway.base.CloudEventsGatewayBaseVerticle;
 
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-public class HttpEventPublisher extends StrombrauBaseVerticle {
+public class HttpEventPublisher extends CloudEventsGatewayBaseVerticle {
 
     private static final Logger logger = Logger.getLogger(HttpEventPublisher.class.getName());
     private HttpClient client;
@@ -56,7 +50,7 @@ public class HttpEventPublisher extends StrombrauBaseVerticle {
 
             final JsonObject jsonObject = data.value().toJsonObject();
             logger.info("Publishing event to HTTP: (" + jsonObject.getString("eventType") + ")");
-            logger.info("Posting to ->   " +  myconf.getString("HTTP_OUTPUT_ENDPOINT")  );
+            logger.info("Posting to ->   " + myconf.getString("HTTP_OUTPUT_ENDPOINT"));
 
             client.postAbs(myconf.getString("HTTP_OUTPUT_ENDPOINT"), response -> {
                 System.out.println("Received response with status code " + response.statusCode());

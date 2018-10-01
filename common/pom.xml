@@ -5,12 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>io.streamzi.router</groupId>
-        <artifactId>parent</artifactId>
+        <groupId>io.streamzi.cloudevents</groupId>
+        <artifactId>gateway-parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>io.streamzi.router</groupId>
     <artifactId>common</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 

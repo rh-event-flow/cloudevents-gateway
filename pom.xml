@@ -10,8 +10,8 @@
         <version>27</version>
     </parent>
 
-    <groupId>io.streamzi.router</groupId>
-    <artifactId>parent</artifactId>
+    <groupId>io.streamzi.cloudevents</groupId>
+    <artifactId>gateway-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 

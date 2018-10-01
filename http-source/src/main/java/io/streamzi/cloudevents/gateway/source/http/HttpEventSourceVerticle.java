@@ -1,26 +1,25 @@
-package io.streamzi.router.source.http;
+package io.streamzi.cloudevents.gateway.source.http;
 
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
-import io.streamzi.router.base.StrombrauBaseVerticle;
+import io.streamzi.cloudevents.CloudEvent;
+import io.streamzi.cloudevents.impl.CloudEventImpl;
 import io.vertx.core.json.Json;
 import io.vertx.kafka.client.producer.RecordMetadata;
 import io.vertx.reactivex.config.ConfigRetriever;
 import io.vertx.reactivex.core.http.HttpServer;
 import io.vertx.reactivex.core.http.HttpServerRequest;
-
-import io.streamzi.cloudevents.impl.CloudEventImpl;
-import io.streamzi.cloudevents.CloudEvent;
 import io.vertx.reactivex.kafka.client.producer.KafkaProducer;
 import io.vertx.reactivex.kafka.client.producer.KafkaProducerRecord;
 import org.apache.kafka.clients.producer.ProducerConfig;
+import io.streamzi.cloudevents.gateway.base.CloudEventsGatewayBaseVerticle;
 
 import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class HttpEventSourceVerticle extends StrombrauBaseVerticle {
+public class HttpEventSourceVerticle extends CloudEventsGatewayBaseVerticle {
 
     private static final Logger logger = Logger.getLogger(HttpEventSourceVerticle.class.getName());
 
@@ -32,7 +31,7 @@ public class HttpEventSourceVerticle extends StrombrauBaseVerticle {
 
         retriever.rxGetConfig().subscribe(myconf -> {
             final Map config = new Properties();
-            config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, myconf.getString("MY_CLUSTER_KAFKA_SERVICE_HOST") + ":"  + myconf.getInteger("MY_CLUSTER_KAFKA_SERVICE_PORT").toString());
+            config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, myconf.getString("MY_CLUSTER_KAFKA_SERVICE_HOST") + ":" + myconf.getInteger("MY_CLUSTER_KAFKA_SERVICE_PORT").toString());
 
             producer = KafkaProducer.create(vertx, config, String.class, String.class);
         });
