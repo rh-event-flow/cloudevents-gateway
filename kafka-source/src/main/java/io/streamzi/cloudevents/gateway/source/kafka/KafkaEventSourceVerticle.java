@@ -35,14 +35,14 @@ public class KafkaEventSourceVerticle extends CloudEventsGatewayBaseVerticle {
         retriever.rxGetConfig().subscribe(myconf -> {
 
             final Map consumerConfig = new Properties();
-            consumerConfig.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, myconf.getString("MY_CLUSTER_KAFKA_BOOTSTRAP_SERVICE_PORT_CLIENTS") + ":" + myconf.getInteger("MY_CLUSTER_KAFKA_BOOTSTRAP_SERVICE_PORT").toString());
+            consumerConfig.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, myconf.getString("MY_CLUSTER_KAFKA_BOOTSTRAP_SERVICE_HOST") + ":" + myconf.getInteger("MY_CLUSTER_KAFKA_BOOTSTRAP_SERVICE_PORT").toString());
             consumerConfig.put(ConsumerConfig.GROUP_ID_CONFIG, "io.streamzi.kafka.source");
             consumerConfig.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
             consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, BufferDeserializer.class);
             consumerConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, BufferDeserializer.class);
 
             final Map producerConfig = new Properties();
-            producerConfig.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, myconf.getString("MY_CLUSTER_KAFKA_BOOTSTRAP_SERVICE_PORT_CLIENTS") + ":" + myconf.getInteger("MY_CLUSTER_KAFKA_BOOTSTRAP_SERVICE_PORT").toString());
+            producerConfig.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, myconf.getString("MY_CLUSTER_KAFKA_BOOTSTRAP_SERVICE_HOST") + ":" + myconf.getInteger("MY_CLUSTER_KAFKA_BOOTSTRAP_SERVICE_PORT").toString());
             writeStream = KafkaWriteStream.create(vertx.getDelegate(), producerConfig, String.class, String.class);
 
 
