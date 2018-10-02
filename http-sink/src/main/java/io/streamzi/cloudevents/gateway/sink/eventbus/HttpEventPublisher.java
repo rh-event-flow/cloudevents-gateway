@@ -32,7 +32,7 @@ public class HttpEventPublisher extends CloudEventsGatewayBaseVerticle {
 
 
         final Map consumerConfig = new Properties();
-        consumerConfig.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, myconf.getString("MY_CLUSTER_KAFKA_SERVICE_HOST") + ":" + myconf.getInteger("MY_CLUSTER_KAFKA_SERVICE_PORT").toString());
+        consumerConfig.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, myconf.getString("MY_CLUSTER_KAFKA_BOOTSTRAP_SERVICE_HOST") + ":" + myconf.getInteger("MY_CLUSTER_KAFKA_BOOTSTRAP_SERVICE_PORT_CLIENTS").toString());
 
         // if STREAMZI_GROUP is not defined, we use a UUID, to guarantee unique consumer group, per EVENT_TYPE
         final String streamziGroup = myconf.getString("STREAMZI_GROUP") != null ? myconf.getString("STREAMZI_GROUP") : UUID.randomUUID().toString();

@@ -31,7 +31,7 @@ public class HttpEventSourceVerticle extends CloudEventsGatewayBaseVerticle {
 
         retriever.rxGetConfig().subscribe(myconf -> {
             final Map config = new Properties();
-            config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, myconf.getString("MY_CLUSTER_KAFKA_SERVICE_HOST") + ":" + myconf.getInteger("MY_CLUSTER_KAFKA_SERVICE_PORT").toString());
+            config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, myconf.getString("MY_CLUSTER_KAFKA_BOOTSTRAP_SERVICE_PORT_CLIENTS") + ":" + myconf.getInteger("MY_CLUSTER_KAFKA_BOOTSTRAP_SERVICE_PORT").toString());
 
             producer = KafkaProducer.create(vertx, config, String.class, String.class);
         });
