@@ -1,6 +1,6 @@
 # :rocket: CloudEvent Router and Gateway
 
-[![Build Status](https://travis-ci.org/project-streamzi/event-gateway.png)](https://travis-ci.org/project-streamzi/event-gateway)
+[![Build Status](https://travis-ci.org/project-streamzi/cloudevents-gateway.png)](https://travis-ci.org/project-streamzi/cloudevents-gateway)
 [![License](https://img.shields.io/:license-Apache2-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
 A simple POC for a Gateway that is routing CloudEvents from different sources to a Kafka topic.
