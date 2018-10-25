@@ -16,7 +16,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <vertx.version>3.5.2</vertx.version>
+        <vertx.version>3.5.4</vertx.version>
         <jcloudevents.version>0.0.2</jcloudevents.version>
         <fmp.version>3.5.40</fmp.version>
     </properties>
